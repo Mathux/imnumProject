@@ -1,0 +1,62 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{amssymb}
+
+\usepackage[utf8]{inputenc}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+  
+\newlength\tindent
+\setlength{\tindent}{\parindent}
+\setlength{\parindent}{0pt}
+\renewcommand{\indent}{\hspace*{\tindent}}
+
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+\DeclareMathOperator{\tr}{Tr}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\title{Projet d'imagerie numérique : Inpainting par réseaux \\ \vskip 7px 
+\Large Mathis Petrovich et Raphael Bricout
+\vskip -2em}
+\author{}
+
+\maketitle{}
+
+\section{Introduction}
+
+
+\section{Comment ça marche ?}
+
+\subsection{Structure du réseau}
+\subsection{Entrainement}
+
+\section{Observation sur des exemples}
+
+\subsection{Dataset utilisé pour entrainement : Places2}
+ça marche bien
+
+\subsection{Visage (CelebA)}
+Marche pas bien du tout car le model n'est pas entrainer dessus.
+Ce model n'est pas disponible pour faire des test : TODO github photo
+
+\section{Quesce qu'on peux changer pour observer les couches?}
+
+\subsection{Batchnormlisation}
+
+
+\subsection{Rajouter du bruit dans les couches}
+
+\subsubsection{Test avec une image de référence}
+Test et observation de la dégradation de l'inpainting
+
+
+
+
+\end{document}
