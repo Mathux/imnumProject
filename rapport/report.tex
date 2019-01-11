@@ -6,6 +6,7 @@
 \usepackage{multicol}
 \usepackage{listings}
 \usepackage{amsmath}
+\usepackage{float}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
   
@@ -39,7 +40,7 @@ L'inpainting n'est pas un problème récent. Il a d'abord été réalisé à la 
 
 Les applications sont diverses : restauration de vieilles photographies et de documents historiques \cite{bertalmio2000}, completion d'objects partiellement obstrués, supression de parasites dans des vidéos \cite{wexler2007}, etc. Plus récemment, on peut utiliser de l'inpainting pour de la reconstitution de surfaces d'objets 3D \cite{bobenko2005} \cite{harary2014}.
 
-\section{Le papier}
+\section{Résumé du papier}
 
 Dans les méthodes exposées plus haut, la complétion est locale, et ne prend donc pas en compte une compréhension globale de l'image. Le principe de ce papier est donc de mixer à la fois une complétion globale et locale.
 
@@ -53,6 +54,21 @@ Le but de ce papier est de garder les avantages de toutes les méthodes. Il vise
 \section{Comment ça marche ?}
 
 \subsection{Structure du réseau}
+D'un point de vue extérieur, le réseau est plutôt simple : 
+\begin{itemize}
+    \item il y a un réseau de complétion qui à partir d'une image et d'un mask de même dimension, renvoie une image complétée. C'est le réseau principal et lors des tests, il est le seul à être utilisé
+    \item le réseau adversaire (GAN) est composé de deux parties qui sont combinées à la fin pour dire si l'image d'entrée est probablement un fake ou non. Les deux parties sont : 
+    \begin{itemize}
+        \item un discriminateur global, qui va essayer de traquer les erreurs de complétion globales, et donc si le patch complété est cohérent avec toute l'image
+        \item un discriminateur local, qui va essayer de déterminer si l'image est localement consistente, et donc si le patch complété est localement cohérent
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{network_overview.png}
+    \caption{Overview of the architecture}
+\end{figure}
+
 \subsection{Entrainement}
 
 \section{Observation sur des exemples}
@@ -61,6 +77,14 @@ Le but de ce papier est de garder les avantages de toutes les méthodes. Il vise
 ça marche bien
 
 \subsection{Visage (CelebA)}
+
+\subsection{Problèmes}
+\begin{itemize}
+    \item visages
+    \item trop près du bord
+    \item mask rectangulaire vs difforme
+\end{itemize}
+
 Marche pas bien du tout car le model n'est pas entrainer dessus.
 Ce model n'est pas disponible pour faire des test : TODO github photo
 
@@ -78,6 +102,7 @@ Test et observation de la dégradation de l'inpainting
 
 Est-ce que la complétion vient d'un patch ou bien est-ce qu'elle est créée ? \\
 Zero padding ? Vérifier sur les exemples.\\
+
 
 \bibliographystyle{plain}
 \bibliography{bib}
