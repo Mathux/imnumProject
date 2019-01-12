@@ -40,7 +40,7 @@ L'inpainting n'est pas un problème récent. Il a d'abord été réalisé à la 
 
 Les applications sont diverses : restauration de vieilles photographies et de documents historiques \cite{bertalmio2000}, completion d'objects partiellement obstrués, supression de parasites dans des vidéos \cite{wexler2007}, etc. Plus récemment, on peut utiliser de l'inpainting pour de la reconstitution de surfaces d'objets 3D \cite{bobenko2005} \cite{harary2014}.
 
-\section{Résumé du papier}
+\section{Aperçu du papier}
 
 Dans les méthodes exposées plus haut, la complétion est locale, et ne prend donc pas en compte une compréhension globale de l'image. Le principe de ce papier est donc de mixer à la fois une complétion globale et locale.
 
@@ -74,21 +74,42 @@ D'un point de vue extérieur, le réseau est plutôt simple :
 \section{Observation sur des exemples}
 
 \subsection{Dataset utilisé pour entrainement : Places2}
-ça marche bien
+
+Tout d'abord, on peut réutiliser des images appartenant au dataset de validation de Places2. Bien que les images soient diverses, on obtient des résultats corrects pour les images de paysages, même s'ils ne sont pas toujours satisfaisants pour de l'inpainting de visages (cf. section ci-dessous).
+
+IMAGES
+
+--Discussion des images--
+
+\subsection{Différentes formes de masks}
+
+L'entraînement du réseau s'est fait en utilisant des masks rectangulaires. Il nous semblait donc possible que l'inpainting sera moins performant si l'on utilise des masks moins réguliers. Pour tester cette hypothèse, nous avons comparé les résultats obtenus sur la même image, en cachant le même objet, mais avec des masks différents.
+
+IMAGES
+
+--Discussion des images--
 
 \subsection{Visage (CelebA)}
 
-\subsection{Problèmes}
-\begin{itemize}
-    \item visages
-    \item trop près du bord
-    \item mask rectangulaire vs difforme
-\end{itemize}
+Un autre point que nous avons voulu tester est l'inpainting sur les visages. En théorie, la méthode utilisant de l'apprentissage profond fonctionne mieux que la mathode par patchs pour compléter des visages, car il est souvent nécessaire d'inventer de nouveaux objets comme des yeux, un nez, des cheveux, etc. et la mathode par patch n'a possiblement pas ces objets en réserve. Cependant, les tests que nous avons fait ne sont pas très concluant. En effet, pour obtenir les résultats présentés dans le papier, le réseau a été entraîné spécifiquement et nous ne disposons pas de cet autre réseau. A notre grande déception, ce modele n'est pas disponible pour faire des test.
 
-Marche pas bien du tout car le model n'est pas entrainer dessus.
-Ce model n'est pas disponible pour faire des test : TODO github photo
+IMMAGE GITHUB
 
-\section{Qu'est-ce qu'on peut changer pour observer les couches?}
+IMAGES TEST
+
+--Discussion des images--
+
+\subsection{Zero-Padding}
+
+Le papier stipule que les makss qui sont trop près du bord ne donnent pas de bons résultats. Pour vérifier cette affirmation, nous avons effectué plusieurs tests avec des masks plus ou moins près du bord, sur la même image.
+
+IMAGES
+
+---Discussion des images--
+
+\section{Bidouilles du réseau}
+
+
 
 \subsection{Batchnormlisation}
 
@@ -100,8 +121,12 @@ Test et observation de la dégradation de l'inpainting
 
 \section{Questions additionnelles}
 
-Est-ce que la complétion vient d'un patch ou bien est-ce qu'elle est créée ? \\
-Zero padding ? Vérifier sur les exemples.\\
+Il y a d'autres questions que nous nous sommes posées, mais il n'est pas possible avec nos moyens d'y répondre. Il est cependant intéressant de se les poser pour avoir une vue plus globale sur le papier.
+\begin{itemize}
+    \item a quel point le réseau fait-il du surapprentissage lorsque l'on l'entraîne spécifiquement (sur des visages par exemple) ?
+    \item est-ce que la complétion vient d'un "patch" retenu lors de l'entraînement ou bien est-ce qu'elle est créée ?
+\end{itemize}
+
 
 
 \bibliographystyle{plain}
