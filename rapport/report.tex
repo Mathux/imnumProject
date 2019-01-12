@@ -101,11 +101,14 @@ IMAGES TEST
 
 \subsection{Zero-Padding}
 
-Le papier stipule que les makss qui sont trop près du bord ne donnent pas de bons résultats. Pour vérifier cette affirmation, nous avons effectué plusieurs tests avec des masks plus ou moins près du bord, sur la même image.
+Le papier stipule que les maks qui sont trop près du bord ne donnent pas de bons résultats. Pour vérifier cette affirmation, nous avons effectué plusieurs tests avec des masks plus ou moins près du bord, sur la même image.
 
-IMAGES
+\begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{padding.png}
+    \caption{(a), (b), (c) inputs et outputs (sans postprocess) à une distance de (a) 0 pixel, (b) 3 pixels, (c) 6 pixels du bord. Seul le cas (c) est convainquant, les autres ont des artefacts}
+\end{figure}
 
----Discussion des images--
+Quand le mask est trop près du bord, on constate un artefact dû au fait qu l'on moyenne du noir (en dehors de l'image), ce qui ressort sur le côté. Cependant, dès que l'on est à une distance relativement faible du bord, le résultat n'est plus affecté par ce problème : s'il y a des artefacts, ce n'est plus dû à la trop grande proximité avec le bord.
 
 \section{Bidouilles du réseau}
 
@@ -127,7 +130,27 @@ Il y a d'autres questions que nous nous sommes posées, mais il n'est pas possib
     \item est-ce que la complétion vient d'un "patch" retenu lors de l'entraînement ou bien est-ce qu'elle est créée ?
 \end{itemize}
 
+\section{Bonus}
 
+\subsection{Test du réseau sur des images non naturelles}
+
+Avec un style un peu différent.
+
+\begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{Col.png}
+    \caption{(a), (b), (c) et (d) des inputs et outputs (sans postprocess) sur une image ayant un style particulier (type pastel).}
+\end{figure}
+
+Sur un style qui diffère un peu, mais pas de manière trop brutale avec les images naturelles qui composent en immense majorité Places2 (il n'est pas exclu qu'il y ait des images de pastels), on obtient un résultat qui contient parfois des artefacts, mais qui est parfois convainquant, ce qui est plutôt une bonne surprise.
+
+Avec un style très particulier.
+
+\begin{figure}[H]
+    \includegraphics[width=0.3\textwidth]{gogh.png}
+    \caption{Inpainting (sans postprocess) de la nuit étoilée de Van Gogh.}
+\end{figure}
+
+Comme on pouvait s'y attendre, le réseau à beaucoup de mal à s'adapter au style d'une image particulière. La complétion n'est pas abérrente en soi (localement), mais elle ne s'accorde pas avec le style global de l'image.
 
 \bibliographystyle{plain}
 \bibliography{bib}
