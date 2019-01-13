@@ -23,7 +23,7 @@
 
 
 ### Structure du réseau
-<image src="https://github.com/Mathux/imnumProject/blob/master/rapport/network_overview.png" controls style="width:60%"></image>
+<image src="https://perso.crans.org/bricout/Intronum/network_overview.png" controls style="width:90%"></image>
 
 
 ## Tests sur le réseau
@@ -34,7 +34,8 @@ Images
 
 
 ### Zero-padding
-Images
+Artefacts dus au 0-padding
+<image src="https://perso.crans.org/bricout/Intronum/padding_no_cap.png" controls style="width:80%" ></image>
 
 
 ### Visages
@@ -47,7 +48,13 @@ Pas accès à l'optimisation des visages
 
 
 ### Images non naturelles
-Images
+Style pastel
+<image src="https://perso.crans.org/bricout/Intronum/Col_no_cap.png" controls style="width:90%" ></image>
+
+
+### Images non naturelles
+Style très particulier (impressionnisme)
+<image src="https://perso.crans.org/bricout/Intronum/gogh.png" controls style="width:70%" ></image>
 
 
 ## Expérimentations sur le réseau
@@ -59,6 +66,3 @@ Images
 
 ### Bidouilles du réseau
 Images
-
-
-## Bonus
