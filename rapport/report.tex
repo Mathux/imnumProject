@@ -93,9 +93,12 @@ IMAGES
 
 Un autre point que nous avons voulu tester est l'inpainting sur les visages. En théorie, la méthode utilisant de l'apprentissage profond fonctionne mieux que la mathode par patchs pour compléter des visages, car il est souvent nécessaire d'inventer de nouveaux objets comme des yeux, un nez, des cheveux, etc. et la mathode par patch n'a possiblement pas ces objets en réserve. Cependant, les tests que nous avons fait ne sont pas très concluant. En effet, pour obtenir les résultats présentés dans le papier, le réseau a été entraîné spécifiquement et nous ne disposons pas de cet autre réseau. A notre grande déception, ce modele n'est pas disponible pour faire des test.
 
-IMMAGE GITHUB
-
-IMAGES TEST
+\begin{center}
+\begin{figure}[H]
+    \includegraphics[width=0.7\textwidth]{Images/reine.png}
+    \caption{(a), (b) inputs et outputs (sans postprocess) d'un visage. En (a), les yeux sont remplaçés par une texture pas très convainquante; en (b), il y a un artefact clairement horrible}
+\end{figure}
+\end{center}
 
 --Discussion des images--
 
