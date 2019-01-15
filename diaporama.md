@@ -181,8 +181,6 @@ Artefacts dus au 0-padding
 | <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Noise_conv/neige_in_square.png" controls style="width:95%" ></image></p>| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Noise_conv/neige_out_square_noise_0.000.png" controls style="width:95%" ></image></p> | <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Noise_conv/neige_out_square_noise_0.040.png" controls style="width:95%" ></image></p>| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Noise_conv/neige_out_square_noise_0.100.png" controls style="width:95%" ></image></p>| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Noise_conv/neige_out_square_noise_0.300.png" controls style="width:95%" ></image></p>|
 
 
-## Fin
-
 
 
 ### Outil pour les créer des masques
@@ -213,7 +211,7 @@ Sorties
 
 
 ## Dataset utilisés
-- Places2/ImageNet => entrainer globalement
+- Places2/ImageNet => entrainé globalement
 - CelebA, CMP Facade dataset => finetunning
 
 
