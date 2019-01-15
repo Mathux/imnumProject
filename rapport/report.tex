@@ -37,7 +37,15 @@ L'inpainting par réseaux convolutionnels est une application consistant à comp
 
 \section{Etat de l'art}
 
-L'inpainting n'est pas un problème récent. Il a d'abord été réalisé à la main pour l'édition de photographies \cite{Staline}. L'arrivée de l'informatique et du traitement d'images a permit de démocratiser l'inpainting. Les fondements théoriques sont en grande partie arrivées à la fin des années 90, puis ont été développées depuis les années 2000. Les techniques utilisées sont diverses. On peut utiliser des lignes de niveaux. Le principe est de minimiser l'énergie de la reconstruction des lignes de niveaux \cite{masnou1998}. Les méthodes variationnelles ont également été développées \cite{bertalmio2000}, mais ne fonctionnent pas forcément bien pour les textures. On peut également utiliser des patchs \cite{efros1999}. Cette méthode est plutôt efficace et suite à ce papier de 99, beaucoup d'autres papiers ont vu le jour, comme par exemple Darabi et al.\cite{darabi2012} qui introduit une distance entre les patchs. Cette méthode fonctionne plutôt bien, les textures sont respectées, la complétion est localement cohérente. Le principal problème est qu'on ne peut pas inventer un patch qui n'existe pas dans l'image de test ou dans l'ensemble des images d'entraînement. De plus, les patch trop grands impliquent des problèmes sur les structures et la géométrie qui ne sont pas faciles à résoudes.
+L'inpainting n'est pas un problème récent. Il a d'abord été réalisé à
+la main pour l'édition de photographies \cite{Staline}. L'arrivée de
+l'informatique et du traitement d'images a permit de démocratiser
+l'inpainting. Les fondements théoriques sont en grande partie arrivées
+à la fin des années 90, puis ont été développées depuis les années
+2000. Les techniques utilisées sont diverses. Il est possible
+d'utiliser des lignes de niveaux dans le processus, en transformant
+l'image à remplir en ligne de niveau, l'inpainter puis revenir en
+image. C'est notamment ce qu'utilise \cite{masnou1998}. Les méthodes variationnelles ont également été développées \cite{bertalmio2000}, mais ne fonctionnent pas forcément bien pour les textures. On peut également utiliser des patchs \cite{efros1999}. Cette méthode est plutôt efficace et suite à ce papier de 99, beaucoup d'autres papiers ont vu le jour, comme par exemple Darabi et al.\cite{darabi2012} qui introduit une distance entre les patchs. Cette méthode fonctionne plutôt bien, les textures sont respectées, la complétion est localement cohérente. Le principal problème est qu'on ne peut pas inventer un patch qui n'existe pas dans l'image de test ou dans l'ensemble des images d'entraînement. De plus, les patch trop grands impliquent des problèmes sur les structures et la géométrie qui ne sont pas faciles à résoudes.
 
 Les applications sont diverses : restauration de vieilles photographies et de documents historiques \cite{bertalmio2000}, completion d'objects partiellement obstrués, supression de parasites dans des vidéos \cite{wexler2007}, etc. Plus récemment, on peut utiliser de l'inpainting pour de la reconstitution de surfaces d'objets 3D \cite{bobenko2005} \cite{harary2014}.
 
@@ -45,20 +53,24 @@ Les applications sont diverses : restauration de vieilles photographies et de do
 
 Dans les méthodes exposées plus haut, la complétion est locale, et ne prend donc pas en compte une compréhension globale de l'image. Le principe de ce papier est donc de mixer à la fois une complétion globale et locale.
 
-Ce papier utilise un encodeur de contexte (CE \cite{pathak2016}), qui utilise un réseau convolutionnel adversaire (GAN \cite{goodfellow2014}). Le CE est bien, parce qu'il prend en compte une sémantique, et est donc plus global que les méthodes précédentes. De plus, il permet de créer de nouveaux objets. Cependant, contrairement à la méthode de patchs, mais il n'est pas suffisamment cohérent localement et prends des images de taille fixe.
+Ce papier étend le principe d'encodeur de contexte (CE \cite{pathak2016}), qui utilise un réseau convolutionnel adversaire (GAN \cite{goodfellow2014}). Le CE est bien, parce qu'il prend en compte une sémantique, et est donc plus global que les méthodes précédentes. De plus, il permet de créer de nouveaux objets. Cependant, contrairement à la méthode de patchs, mais il n'est pas suffisamment cohérent localement et prends des images de taille fixe.
 
-Le but de ce papier est de garder les avantages de toutes les méthodes. Il vise à améliorer CE en la rendant localement plus cohérente, et plus flexible à la taille de l'image.
+Le but de ce papier est de garder les avantages de toutes les
+méthodes. Il vise à améliorer CE en la rendant localement plus
+cohérente, et plus flexible à la taille de l'image. En effet, la
+nouvelle architecture est totalement convolutionnelle ce qui permet
+d'avoir entrée une image de n'importe quelle taille. \\
 
 
-\paragraph{Remarque :} il eut été intéressant de comparer les résultats du réseau final avec ceux du réseau obtenu uniquement avec en entraînent avec le réseau local et avec le réseau global. Cependant, cela nécessite d'entraîner deux nouveaux réseaux de zéro, ce qui n'est pas possible avec nos moyens.
+\textbf{Remarque} : il eut été intéressant de comparer les résultats du réseau final avec ceux du réseau obtenu uniquement avec en entraînent avec le réseau local et avec le réseau global. Cependant, cela nécessite d'entraîner deux nouveaux réseaux de zéro, ce qui n'est pas possible avec nos moyens.
 
 \section{Fonctionnement du réseau}
 
-\subsection{structure du réseau}
-D'un point de vue extérieur, le réseau est plutôt simple : 
+\subsection{Structure du réseau}
+Sur une échelle globale, le réseau est plutôt simple : 
 \begin{itemize}
     \item il y a un réseau de complétion qui à partir d'une image et d'un masque de même dimension, renvoie une image complétée. C'est le réseau principal et lors des tests, il est le seul à être utilisé
-    \item le réseau adversaire (GAN) est composé de deux parties qui sont combinées à la fin pour dire si l'image d'entrée est probablement un fake ou non. Les deux parties sont : 
+    \item le réseau adversaire (GAN) est composé de deux parties qui sont combinées à la fin pour dire si l'image d'entrée est probablement fausse ou non. Les deux parties sont : 
     \begin{itemize}
         \item un discriminateur global, qui va essayer de traquer les erreurs de complétion globales, et donc si le patch complété est cohérent avec toute l'image
         \item un discriminateur local, qui va essayer de déterminer si l'image est localement consistente, et donc si le patch complété est localement cohérent
@@ -70,11 +82,13 @@ D'un point de vue extérieur, le réseau est plutôt simple :
     \caption{Overview of the architecture}
 \end{figure}
 
-Pour résumer, on entraîne en parallèle deux réseaux : un qui a pour but de compléter des images à trous, et un qui doit reconnaître si une image a été complétée artificiellement. Les deux réseaux s'entraînent mutuellement, le but étant que le réseau qui complète arrive à tromper le réseau qui discrimine.
+Pour résumer, on entraîne en parallèle deux réseaux : un qui a pour
+but de compléter des images à trous, et un qui doit reconnaître si une
+image a été complétée artificiellement. Les deux réseaux sont entraînés mutuellement, le but étant que le réseau qui complète arrive à tromper le réseau qui discrimine.
 
 \subsection{Entrainement}
 
-L'antraînement esst une chose extrêmement délicate pour les GAN de manière générale. Il y a plusieurs problèmes possibles, comme le mod droping par exemple, et il faut entraîner les deux réseaux alternativement, d'une manière qui n'est pas définie de manière théorique, mais qui est plutôt empirique.
+L'entraînement esst une chose extrêmement délicate pour les GAN de manière générale. Il y a plusieurs problèmes possibles, comme le mod droping par exemple, et il faut entraîner les deux réseaux alternativement, d'une manière qui n'est pas définie de manière théorique, mais qui est plutôt empirique.
 
 \section{Observation sur des exemples}
 
@@ -143,7 +157,14 @@ L'entraînement du réseau s'est fait en utilisant des masques rectangulaires. I
   \caption{}\label{fig:occlus_dynamic}
 \end{figure}
 
-On observe de la surinterprétation plutôt évidente sur la forme du masque. Quand le masque est carré, comme lors de l'entraînement du réseau, les résultats sont convainquants. Cependant, les résultats sont poins bons avec un triangle, et encore pire avec un cercle. On peut sur les exemples deviner la forme du masque lorsque l'on utilise autre chose qu'un rectangle. En testant sur d'autres exemples avec des masques de formes non-géomatriques, on obtient des résultats similaires aux formes non-carrées.
+On observe de la surinterprétation plutôt évidente sur la forme du
+masque. Quand le masque est carré, comme lors de l'entraînement du
+réseau, les résultats sont convainquants. Cependant, les résultats
+sont poins bons avec un triangle, et encore pire avec un cercle. On
+peut sur les exemples deviner la forme du masque lorsque l'on utilise
+autre chose qu'un rectangle. En testant sur d'autres exemples avec des
+masques de formes non-géométriques, on obtient des résultats
+similaires aux formes non-carrées.
 
 \subsection{Visage (CelebA)}
 
@@ -166,11 +187,16 @@ Un autre point que nous avons voulu tester est l'inpainting sur les visages. En 
   \caption{inputs et outputs (sans postprocess) d'un visage. A gauche, les yeux sont remplaçés par une texture pas très convainquante; à droite, il y a un artefact évident}\label{fig:occlus_dynamic}
 \end{figure}
 
-Les tests que nous avons fait (exemple ci-dessus) ne sont pas très concluant. Le réseau tel quel ne permet pas d'obtenir des résultats convainquants pour la complétion de visages. En effet, pour obtenir les résultats présentés dans le papier, le réseau a été entraîné spécifiquement et nous ne disposons pas de cet autre réseau. Il est cependant légitime de se demander si ledit réseau n'a pas surinterprété les visages au point de les utiliser comme patch pour être capable de les complèter aussi bien que dans l'article. A notre grande déception, le modéle spécifique pour les visages n'est pas disponible pour faire des tests.
+Les tests que nous avons fait (exemple ci-dessus) ne sont pas très
+concluant. Le réseau tel quel ne permet pas d'obtenir des résultats
+convainquants pour la complétion de visages. En effet, pour obtenir
+les résultats présentés dans le papier, le réseau a été entraîné
+spécifiquement (finetunning) et nous ne disposons de ces poids pour ce
+réseau (non disponible à notre grande déception, malgré une demande sur leur github). Il est cependant légitime de se demander si ledit réseau n'a pas surinterprété les visages au point de les utiliser comme patch pour être capable de les complèter aussi bien que dans l'article.
 
 \subsection{Zero-Padding}
 
-Le papier stipule que les maks qui sont trop près du bord ne donnent pas de bons résultats. Pour vérifier cette affirmation, nous avons effectué plusieurs tests avec des masques plus ou moins près du bord, sur la même image.
+Le papier stipule que les masques qui sont trop près du bord ne donnent pas de bons résultats. Pour vérifier cette affirmation, nous avons effectué plusieurs tests avec des masques plus ou moins près du bord, sur la même image.
 
 \begin{figure}[htb]
 \centering
@@ -203,13 +229,17 @@ Quand le masque est trop près du bord, on constate un artefact dû au fait qu l
 \section{Modification du réseau}
 
 \subsection{Rajouter du bruit dans les couches}
-Pour essayer de comprendre un peu mieux comment fonctionne le réseau, nous avons essayé de mettre du bruit dans les différentes couches de celui-ci, et de voir s'il y avait des constantes, par exemple si les résultats étaient proches sur les différents types de couches du réseau, à savoir batch normalisation, couches convolutives et couches convolutives dilatées.\\
-Nous avons pensé à plusieurs manières d'ajouter du bruit : gaussien ou uniforme. Le bruit gaussien ayant des risques de donner des valeurs très éloignées de la valeur originale, nous avons choisi d'ajouter du bruit uniforme dépendant des valeurs maximales et minimales de la couche. Les valeurs vont en général de $0$ à $0.5$.\\
+Pour essayer de comprendre un peu mieux comment fonctionne le réseau,
+nous avons rajouter du bruit dans les différentes couches de celui-ci.
+Ceci à pour but d'observer l'importance et le rôle de chaque couche dans la
+reconstruction (batch normalisation, couches convolutives et couches convolutives dilatées).\\
+Nous avons pensé à plusieurs manières d'ajouter du bruit : gaussien et
+uniforme. Le bruit gaussien donnant des valeurs trop éloignées de la valeur originale, nous avons choisi d'ajouter du bruit uniforme dépendant des valeurs maximales et minimales de la couche. Les valeurs vont en général de $0$ à $0.5$.\\
 
 \subsubsection{Test avec une image de référence sur les différentes couches}
 Pour tenter de distinguer les différentes couches, nous avons lancé un grand nombre de tests sur une seule image, avec le même masque, sur les 33 couches qui composent le réseau, avec $16$ niveaux de bruit. Pour un souci évident de clarté, nous n'en représenteront que certains ici.
 
-\paragraph{Sur les couches batch}\ \\
+\subsubsection*{Sur les couches batch}
 \begin{figure}[htb]
 \centering
   \subfloat{%
@@ -246,7 +276,7 @@ Sur les couches de batch normalisation, on constate une action plutôt locale, c
 
 \newpage
 
-\paragraph{Sur les couches de convolution}\ \\
+\subsubsection*{Sur les couches de convolution}
 \begin{figure}[htb]
 \centering
   \subfloat{%
@@ -291,13 +321,14 @@ Sur les couches de batch normalisation, on constate une action plutôt locale, c
   \subfloat{%
     \includegraphics[scale=0.24]{Images/Convolution/16/bateau_out_noise_0_28.png}}
   \hfill
-  \caption{réponse des couches de convolution avec un bruit. De haut en bas nous avons les couches 1, 4 et 16. De gauche à droite nous avons le masque, et les bruits de 0, 0.14 et 0.28}\label{fig:occlus_dynamic}
+  \caption{Réponse des couches de convolution avec un bruit. De haut en bas nous avons les couches 1, 4 et 16. De gauche à droite nous avons le masque, et les bruits de 0, 0.14 et 0.28}\label{fig:occlus_dynamic}
 \end{figure}
 
 Les couches de convolutions sont plus difficiles à analyser, car elles sont très différentes les unes des autres. Elles possèdent des paramètres différents comme la taille du noyau ou le stride. Nous pouvons cependant observer ce dernier (couche 4) car il a tendance à créer des lignes blanches quand il y a beaucoup de bruit. On observe également parfois du flou, qui vient possiblement du facteur de dilatation (couche 1).\\
-On peut faire la même remarque que précédemment à propos de la propagation du bruit.
 
-\paragraph{Sur les couches de convolution dilatées}\ \\
+On peut faire la même remarque que précédemment à propos de la propagation du bruit.
+\newpage
+\subsubsection*{Sur les couches de convolution dilatées}
 \begin{figure}[htb]
 \centering
   \subfloat{%
@@ -327,7 +358,7 @@ On peut faire la même remarque que précédemment à propos de la propagation d
   \subfloat{%
     \includegraphics[scale=0.24]{Images/Dilated/28/bateau_out_noise_0_28.png}}
   \hfill
-  \caption{réponse des couches de convolution dilatées avec un bruit. De haut en bas nous avons les couches 22 et 26. De gauche à droite nous avons le masque, et les bruits de 0, 0.14 et 0.28}\label{fig:occlus_dynamic}
+  \caption{Réponse des couches de convolution dilatées avec un bruit. De haut en bas nous avons les couches 22 et 26. De gauche à droite nous avons le masque, et les bruits de 0, 0.14 et 0.28}\label{fig:occlus_dynamic}
 \end{figure}
 
 Les couches de convolution dilatées sont difficiles à analyser. On remarque cependant que la complétion n'est absolument pas locale comme on a pu le voir précédemment, ce qui est plutôt rassurant, car il s'agit là du rôle des couches diatées.
@@ -336,9 +367,58 @@ Les couches de convolution dilatées sont difficiles à analyser. On remarque ce
 
 Il y a d'autres questions que nous nous sommes posées, mais il n'est pas possible avec nos moyens d'y répondre. Il est cependant intéressant de se les poser pour avoir une vue plus globale sur le papier.
 \begin{itemize}
-    \item a quel point le réseau fait-il du surapprentissage lorsque l'on l'entraîne spécifiquement (sur des visages par exemple) ?
-    \item est-ce que la complétion vient d'un "patch" retenu lors de l'entraînement ou bien est-ce qu'elle est créée ?
+    \item A quel point le réseau fait-il du surapprentissage lorsque l'on l'entraîne spécifiquement (sur des visages par exemple) ?
+    \item Est-ce que la complétion vient d'un "patch" retenu lors de l'entraînement ou bien est-ce qu'elle est créée ?
 \end{itemize}
+
+
+
+\section{Implementation}
+
+\subsection{Matériel utilisé}
+Pour pouvoir faire autant de test, nous avons utilisé un GPU (Titan X
+Pascal). Ceci à eu pour effet d'accelerer l'impainting d'un facteur 20
+($30s$ sur GPU à $1,5s$ sur CPU pour inpaint une image).
+
+\subsection{Créateur de masques}
+Pour pourvoir faire des tests plus rapidement, nous avons développé
+un programme qui nous permet d'éditer un masque facilement.
+Il permet de:
+\begin{itemize}
+\item Créer un masque
+\item Changer la forme du "pinceau" (carré/cercle)
+\item Changer le rayon/côté de la forme
+\item Mode édition et mode suppresion
+\item Sauvegarder le masque
+\end{itemize}
+
+\begin{figure}[htb]
+\centering
+  \includegraphics[scale=0.50]{Images/editor.png}
+  \caption{Capture d'écran du programme}
+\end{figure}
+
+\subsection{Code}
+Nous avons au début fait des tests "à la main" en modifiant les fichiers
+lua de l'article.
+
+Puis nous avons rajouter des paramètres proprement pour pouvoir
+l'interfacer avec du code python.
+
+En effet, python dispose de beaucoup de fonctions utile pour gérer les
+fichiers (avec le module os) et permet de lancer le code lua.
+
+
+Nous avons crée des masques algorithmiquement (carré,
+cercle ou triangle) centré au milieu de l'image ayant pour dimension
+$min(width, height)/4$.
+
+\subsection{Statistiques}
+Nous avons tester pour chaque couche (environ 50), plusieurs niveaux de
+bruit (10), plusieurs formes (3) et plusieurs images (10). Ce qui fait
+que nous avons impainté plus de $15000$ images (ce qui fait environ 2Go) 
+
+
 
 \newpage
 
@@ -346,7 +426,7 @@ Il y a d'autres questions que nous nous sommes posées, mais il n'est pas possib
 
 \subsection{Test du réseau sur des images non naturelles}
 
-Avec un style un peu différent.
+\subsubsection*{Avec un style un peu différent}
 \begin{figure}[htb]
 \centering
   \subfloat{%
@@ -381,8 +461,7 @@ Avec un style un peu différent.
 
 Sur un style qui diffère un peu, mais pas de manière trop brutale avec les images naturelles qui composent en immense majorité Places2 (il n'est pas exclu qu'il y ait des images de pastels), on obtient un résultat qui contient parfois des artefacts, mais qui est parfois convainquant, ce qui est plutôt une bonne surprise.
 
-Avec un style très particulier.
-
+\subsubsection*{Avec un style très particulier}
 \begin{figure}[htb]
 \centering
   \subfloat{%

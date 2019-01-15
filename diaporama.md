@@ -1,33 +1,33 @@
 ## Imagerie numérique
 ### Projet inpainting
+Mathis Petrovich et Raphaël Bricout
 
 
 
-## Rapide état de l'art
+### Méthodes usuelles pour ce problème
+ - Méthodes par patchs
+ - Context encoder
 
 
 
-### Méthodes usuelles
-
- - lignes de niveaux
- - méthodes par patchs
- - context encoder
-
-
-
-### Caractéristiques
-
-|				| Patch-based   | Context Encoder  | Network |
-| -----------------------------:| -------------:| ----------------:| -------:|
-| Image size   		  	| Any		| Fixed		   | Any     |
-| Local Conistsency	   	| Yes		| No		   | Yes     |
-| Semantics		   	| No		| Yes		   | Yes     |
-| Creates objects	   	| No		| Yes		   | Yes     |
+## Caractéristiques
+|                                | Patch-based    | Context Encoder   | Network  |
+| -----------------------------: | -------------: | ----------------: | -------: |
+| Image size                     | **Any**        | Fixed             | **Any**  |
+| Local Conistsency              | **Yes**        | No                | **Yes**  |
+| Semantics                      | No             | **Yes**           | **Yes**  |
+| Creates objects                | No             | **Yes**           | **Yes**  |
 
 
 
-### Structure du réseau
+## Structure du réseau
 <image src="https://perso.crans.org/bricout/Intronum/network_overview.png" controls style="width:90%"></image>
+
+
+
+## Dilated convolutions
+<image src="https://cdn-images-1.medium.com/max/1200/0*oX5IPr7TlVM2NpEU.gif" controls style="width:40%"></image> 
+<image src="https://cdn-images-1.medium.com/max/1200/0*3cTXIemm0k3Sbask.gif" controls style="width:40%"></image> 
 
 
 
@@ -35,21 +35,33 @@
 
 
 
-#### Différents masques
-
-|																   |																       |																  |
-| -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_in_triangle.png" controls style="width:80%" ></image></p>| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_in_square.png" controls style="width:80%" ></image></p> | <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_in_circle.png" controls style="width:80%" ></image></p>|
-| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_out_triangle_noise_0.000.png" controls style="width:80%" ></image></p>| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_out_square_noise_0.000.png" controls style="width:80%" ></image></p> | <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_out_circle_noise_0.000.png" controls style="width:80%" ></image></p>|
-
+### Différents masques
+Entrées
+<image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_in_triangle.png" controls style="width:30%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_in_square.png" controls style="width:30%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_in_circle.png" controls style="width:30%" ></image>
 
 
-#### Différents masques
+### Différents masques
+Sorties
+<image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_out_triangle_noise_0.000.png" controls style="width:30%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_out_square_noise_0.000.png" controls style="width:30%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Masks/bateau_out_circle_noise_0.000.png" controls style="width:30%" ></image>
 
-|																   |																       |																  |
-| -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_in_triangle.png" controls style="width:80%" ></image></p>| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_in_square.png" controls style="width:80%" ></image></p> | <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_in_circle.png" controls style="width:80%" ></image></p>|
-| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_out_triangle_noise_0.000.png" controls style="width:80%" ></image></p>| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_out_square_noise_0.000.png" controls style="width:80%" ></image></p> | <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_out_circle_noise_0.000.png" controls style="width:80%" ></image></p>|
+
+
+### Différents masques
+Entrées
+<image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_in_triangle.png" controls style="width:30%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_in_square.png" controls style="width:30%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_in_circle.png" controls style="width:30%" ></image>
+
+
+### Différents masques
+Sorties
+<image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_out_triangle_noise_0.000.png" controls style="width:30%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_out_square_noise_0.000.png" controls style="width:30%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Masks/montagne_out_circle_noise_0.000.png" controls style="width:30%" ></image>
 
 
 ### Zero-padding
@@ -173,23 +185,43 @@ Artefacts dus au 0-padding
 
 
 
+### Outil pour les créer des masques
+<image src="https://perso.crans.org/bricout/Intronum/mask_editor.png" controls style="width:60%" ></image>
+
+
+### Outil pour les créer des masques
+<video src="https://perso.crans.org/petrovich/videos/editor.webm" controls></video>
+
+
+
+### Resultat de l'article sur les visages:
+<image src="https://perso.crans.org/petrovich/imnum/face_article.png" controls style="width:60%" ></image>
+
+
+
+### Test avec mon visage!
+Entrées
+<image src="https://perso.crans.org/bricout/Intronum/Visages/visage_input.png" controls style="width:40%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Visages/visage_bad_2.png" controls style="width:40%" ></image>
+
+
+### Test avec mon visage!
+Sorties
+<image src="https://perso.crans.org/bricout/Intronum/Visages/visage_bad.png" controls style="width:40%" ></image>
+<image src="https://perso.crans.org/bricout/Intronum/Visages/visage_input_2.png" controls style="width:40%" ></image>
+
+
+
+## Dataset utilisés
+- Places2/ImageNet => entrainer globalement
+- CelebA, CMP Facade dataset => finetunning
+
+
+
 ### Visages
-Pas accès à l'optimisation des visages
+Pas accès à leur model 😥
 <image src="https://perso.crans.org/petrovich/imnum/face_model.png" controls style="width:70%" ></image>
 
-
-
-### Visages
-
-|																	   |																		|
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Visages/visage_input.png" controls style="width:40%" ></image></p>| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Visages/visage_bad_2.png" controls style="width:40%" ></image></p>  |
-| <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Visages/visage_bad.png" controls style="width:40%" ></image></p>  | <p align="center"><image src="https://perso.crans.org/bricout/Intronum/Visages/visage_input_2.png" controls style="width:40%" ></image></p>|
-
-
-
-### Facilitation des tests : editeur de masks
-<image src="https://perso.crans.org/bricout/Intronum/mask_editor.png" controls style="width:60%" ></image>
 
 
 
@@ -202,9 +234,28 @@ Pas accès à l'optimisation des visages
 
 
 
-### Facilitation des tests : ajout automatique de bruit
-IMAGE ou description de la méthode
+## Implémentation
+### Première étape (lua)
+- Installer torch7 lua (en mode gpu)
+- Comprendre leur code
+- Rajouter des parametres
 
 
 
-## Fin
+## Implementation
+### Deuxième étape (python)
+- Gérer le système de fichiers
+- Lancer les tests à la suite en série
+- Déplacer les fichiers au bon endroit
+
+
+
+## Tests effectués:
+- Plus de $16000$ images inpaintés
+- Environ $2$Go d'output d'images
+
+
+
+## Credit
+- https://towardsdatascience.com/review-dilated-convolution-semantic-segmentation-9d5a5bd768f5
+- https://arxiv.org/pdf/1604.07379.pdf
